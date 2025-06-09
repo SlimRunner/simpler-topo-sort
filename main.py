@@ -200,7 +200,8 @@ def genTempName(context: set[str]):
 def runTests():
     msglines = []
 
-    for taskList in TESTS:
+    for name, taskList in TESTS.items():
+        msglines.append(name)
         values: dict[str, int] = dict()
         expected: dict[str, int] = dict()
         saved: dict[str, int] = dict()
@@ -227,7 +228,9 @@ def runTests():
         msgerr += pformat(taskList) + "\n"
         schedule = createSchedule(taskList)
         msgerr += pformat([f"{l} = {r}" for l, r in schedule]) + "\n"
+
         msglines.append(pformat([f"{l} = {r}" for l, r in schedule]))
+        msglines.append("")
 
         for lhs, rhs in schedule:
             values[lhs] = values[rhs]
@@ -236,7 +239,7 @@ def runTests():
             msgerr += f"key, value: {k}, {v}\n"
             assertEquals(values[k], v, msgerr)
 
-    print("\n\n".join(msglines))
+    print("\n".join(msglines))
 
 
 def assertEquals(value, expected, msg: str | None = None):
@@ -246,8 +249,8 @@ def assertEquals(value, expected, msg: str | None = None):
         raise AssertionError(f"value {value} does not equal {expected}")
 
 
-TESTS: list[list[tuple[str, str]]] = [
-    [
+TESTS: dict[str, list[tuple[str, str]]] = {
+    "small-cycle-w-branching": [
         ("x2", "x1"),
         ("x1", "x0"),
         ("x0", "y0"),
@@ -264,7 +267,7 @@ TESTS: list[list[tuple[str, str]]] = [
         ("y9", "y6"),
         ("w0", "w0"),
     ],
-    [
+    "two-cycles-w-branching": [
         ("x4", "x1"),
         ("x5", "x4"),
         ("z1", "x5"),
@@ -280,7 +283,7 @@ TESTS: list[list[tuple[str, str]]] = [
         ("a3", "a4"),
         ("a4", "a1"),
     ],
-    [
+    "two-small-cycles": [
         ("a2", "a2"),
         ("a3", "t0"),
         ("a4", "a7"),
@@ -288,7 +291,7 @@ TESTS: list[list[tuple[str, str]]] = [
         ("a6", "a5"),
         ("a7", "a4"),
     ],
-    [
+    "disjoint-chain": [
         ("a2", "t3"),
         ("a3", "a7"),
         ("a4", "a3"),
@@ -296,28 +299,91 @@ TESTS: list[list[tuple[str, str]]] = [
         ("a6", "a5"),
         ("a7", "a5"),
     ],
-    [
+    "large-loop-w-branch": [
+        ("t3", "a7"),
+        ("a3", "t3"),
         ("a2", "t3"),
-        ("a3", "a7"),
         ("a4", "a3"),
         ("a5", "a4"),
         ("a6", "a5"),
         ("a7", "a5"),
     ],
-    [
+    "cycle-len-five": [
         ("v0", "v1"),
         ("v1", "v2"),
         ("v2", "v3"),
         ("v3", "v4"),
         ("v4", "v0"),
     ],
-    [("x", "x")],
-    [
+    "one-loop": [("x", "x")],
+    "cycle-of-size-two": [
         ("x", "x"),
         ("x", "y"),
     ],
-    [],
-]
+    "empty-set": [],
+    "standard": [
+        ("x", "y"),
+        ("b", "c"),
+        ("y", "z"),
+        ("c", "d"),
+        ("z", "x"),
+        ("d", "a"),
+        ("a", "b"),
+    ],
+    "two-cycles-no-branching": [
+        ("y", "z"),
+        ("x", "y"),
+        ("a", "b"),
+        ("c", "d"),
+        ("d", "e"),
+    ],
+    "loops-everywhere": [
+        ("a", "b"),
+        ("b", "c"),
+        ("c", "d"),
+        ("d", "e"),
+        ("a", "a"),
+        ("b", "b"),
+        ("c", "c"),
+        ("d", "d"),
+        ("e", "e"),
+    ],
+    "deep-tree": [
+        ("y1", "x1"),
+        ("y2", "x1"),
+        ("y3", "x1"),
+        ("z1", "y1"),
+        ("z2", "y1"),
+        ("z3", "y1"),
+        ("z4", "y3"),
+        ("z5", "y3"),
+        ("w1", "z2"),
+        ("w2", "z2"),
+        ("w3", "z3"),
+        ("v1", "w2"),
+        ("v2", "w2"),
+        ("v3", "w2"),
+        ("v4", "w2"),
+    ],
+    "deep-non-tree": [
+        ("y1", "x1"),
+        ("y2", "x1"),
+        ("y3", "x1"),
+        ("z1", "y1"),
+        ("z2", "y1"),
+        ("z3", "y1"),
+        ("z4", "y3"),
+        ("z5", "y3"),
+        ("w1", "z2"),
+        ("w2", "z2"),
+        ("w3", "z3"),
+        ("v1", "w2"),
+        ("v2", "w2"),
+        ("v3", "w2"),
+        ("v4", "w2"),
+        ("x1", "v4"),
+    ],
+}
 
 if __name__ == "__main__":
     main()
