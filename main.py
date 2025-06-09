@@ -28,7 +28,7 @@ def createSchedule(tasks: list[tuple[str, str]]) -> list[tuple[str, str]]:
             continue
 
         # this call relies on revGraph having max out-degree of exactly 1
-        orderedChains.extend(findComponents(revGraph, node, visits))
+        orderedChains.extend(sortedComponents(revGraph, node, visits))
 
     schedule = topoSortChains(orderedChains, context)
 
@@ -97,7 +97,7 @@ def depLookAhead(chains: list[tuple[list[str], bool]], key: str, at: int):
     return None
 
 
-def findComponents(revGraph: dict[str, list[str]], root: str, visits: Counter[str]):
+def sortedComponents(revGraph: dict[str, list[str]], root: str, visits: Counter[str]):
     ordered: list[tuple[list[str], bool]] = []
     stack: list[str] = [root]
     visits[root] += 1
