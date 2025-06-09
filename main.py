@@ -216,6 +216,8 @@ def runTests():
             saved[lhs] = values[lhs]
 
         for lhs, rhs in taskList:
+            if (lhs == rhs):
+                continue
             if rhs not in saved:
                 expected[lhs] = values[rhs]
             else:
