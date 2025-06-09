@@ -317,11 +317,11 @@ TESTS: dict[str, list[tuple[str, str]]] = {
     ],
     "one-loop": [("x", "x")],
     "cycle-of-size-two": [
-        ("x", "x"),
+        ("y", "x"),
         ("x", "y"),
     ],
     "empty-set": [],
-    "standard": [
+    "two-disjoint-cycles": [
         ("x", "y"),
         ("b", "c"),
         ("y", "z"),
@@ -330,7 +330,7 @@ TESTS: dict[str, list[tuple[str, str]]] = {
         ("d", "a"),
         ("a", "b"),
     ],
-    "two-cycles-no-branching": [
+    "two-paths-no-branching": [
         ("y", "z"),
         ("x", "y"),
         ("a", "b"),
@@ -365,7 +365,7 @@ TESTS: dict[str, list[tuple[str, str]]] = {
         ("v3", "w2"),
         ("v4", "w2"),
     ],
-    "deep-non-tree": [
+    "deep-tree-like": [
         ("y1", "x1"),
         ("y2", "x1"),
         ("y3", "x1"),
